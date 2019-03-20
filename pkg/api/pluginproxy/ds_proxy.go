@@ -253,6 +253,10 @@ func (proxy *DataSourceProxy) validateRequest() error {
 		}
 	}
 
+	if proxy.ctx.SignedInUser.OrgId != proxy.ctx.Req.Request.Header.Get("X-Grafana-Org-Id") {
+		return errors.New("Org-id in header not match with logged in user")
+	}
+
 	// found route if there are any
 	if len(proxy.plugin.Routes) > 0 {
 		for _, route := range proxy.plugin.Routes {
